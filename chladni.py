@@ -3,12 +3,13 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # Grid of cells
-WIDTH = 100
+WIDTH = 200
 HEIGHT = 100
 fixed = np.ones((HEIGHT, WIDTH)) # Array of 0s and 1s indicating 0 for a cell fixed in place and 1 for free
-fixed[50, 50] = 0
+fixed[50,45:55] = 0
+fixed[45:55, 50] = 0
 active = np.zeros((HEIGHT, WIDTH)) # Array of 0s and 1s indicating which cells are being actively vibrated
-active[50, 0] = 1
+active[0, 0] = 1
 influ = np.ones((HEIGHT, WIDTH)) # Influence coefficient of how strongly a cell affects its neighbors
 displ = np.zeros((HEIGHT, WIDTH)) # Displacement of cells
 veloc = np.zeros((HEIGHT, WIDTH)) # Velocity of cells
@@ -16,8 +17,8 @@ accel = np.zeros((HEIGHT, WIDTH)) # Acceleration of cells
 mass = 1 # mass of each cell
 
 # Variables for active vibration
-time = 0
-period = 10
+time = 0.0
+period = 100.0
 
 # Variables for plotting
 epsilon = 100 # Consider the cell to be stationary if the magnitude of its average velocity is below epsilon
@@ -45,7 +46,7 @@ def updatefig(*args):
         displ += veloc
         displ *= fixed
         # clip displacement values to range
-        displ = np.clip(displ, -10000, 10000)
+        displ = np.clip(displ, -epsilon * 100, epsilon * 100)
         # Update velocity
         veloc += accel
         veloc *= fixed
@@ -73,7 +74,7 @@ def updatefig(*args):
         accel /= mass
         accel *= fixed
         # Update active cells
-        displ += active * np.sin(time / period) - active * displ
+        displ += active * epsilon * 100.0 * np.sin(2 * np.pi * time / period) - active * displ
         # Update time
         time = time + 1
         step = step + 1

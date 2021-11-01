@@ -5,3 +5,5 @@ The material is modeled by a grid of cells. Each cell has a displacement, veloci
 Which cells are fixed and which are actively vibrating can be configured in the code.
 
 I don't think that I succeeded in accurately simulating how Chladni figures actually arise, but there are some interesting results nonetheless.
+
+![./Animation_1.gif]
