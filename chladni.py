@@ -6,14 +6,14 @@ import matplotlib.animation as animation
 WIDTH = 100
 HEIGHT = 100
 fixed = np.ones((HEIGHT, WIDTH)) # Array of 0s and 1s indicating 0 for a cell fixed in place and 1 for free
-fixed[20, 0:40] = 0
+fixed[50, 50] = 0
 active = np.zeros((HEIGHT, WIDTH)) # Array of 0s and 1s indicating which cells are being actively vibrated
-active[0, 0] = 1
+active[50, 0] = 1
 influ = np.ones((HEIGHT, WIDTH)) # Influence coefficient of how strongly a cell affects its neighbors
 displ = np.zeros((HEIGHT, WIDTH)) # Displacement of cells
 veloc = np.zeros((HEIGHT, WIDTH)) # Velocity of cells
 accel = np.zeros((HEIGHT, WIDTH)) # Acceleration of cells
-mass = 40 # mass of each cell
+mass = 1 # mass of each cell
 
 # Variables for active vibration
 time = 0
@@ -69,6 +69,7 @@ def updatefig(*args):
         fe[:, WIDTH - 1] = 0
         # New acceleration is dependent on how relatively displaced each neighbor is and influence
         accel = (dn - displ) * fn + (ds - displ)* fs + (de - displ) * fe + (dw - displ) * fw
+        accel /= 4
         accel /= mass
         accel *= fixed
         # Update active cells
@@ -77,7 +78,7 @@ def updatefig(*args):
         time = time + 1
         step = step + 1
         # Update rolling average velocity value
-        average_vel = (average_vel * step + veloc) / (step + 1)
+        average_vel = average_vel * (step / (step + 1)) + veloc / (step + 1)
 
     # Plot cells with average velocity below epsilon
     vstationary = np.vectorize(stationary)
